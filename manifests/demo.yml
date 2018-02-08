@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spinnaker-demo-config
+  namespace: default
+data:
+  NEW_FEATURE: "false"
+
+---
+
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: spinnaker-demo
+  labels:
+    source: demo
+    app: spinnaker
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      source: demo
+      app: spinnaker
+  template:
+    metadata:
+      labels:
+        source: demo
+        app: spinnaker
+    spec:
+      containers:
+      - name: primary
+        image: index.docker.io/lwander/spin-kub-v2-demo
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: spinnaker-demo-config
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: spinnaker-demo
+spec:
+  selector:
+    source: demo
+    app: spinnaker
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
