@@ -32,6 +32,10 @@ spec:
         image: index.docker.io/lwander/spin-kub-v2-demo
         ports:
         - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
         envFrom:
         - configMapRef:
             name: spinnaker-demo-config
