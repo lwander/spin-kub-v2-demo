@@ -12,6 +12,7 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: spinnaker-demo
+  namespace: default
   labels:
     source: demo
     stack: frontend
@@ -47,6 +48,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: spinnaker-demo
+  namespace: default
 spec:
   selector:
     source: demo
